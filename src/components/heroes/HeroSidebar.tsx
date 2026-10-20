@@ -6,7 +6,7 @@ import { chapterByNumber } from '../../data/chapters'
 import { anchorsForHero, statesForChapter, type HeroState } from '../../data/heroPositions'
 import { placeById } from '../../data/places'
 import { useAppStore } from '../../store/appStore'
-import { atlasConfig } from '../../config'
+import { atlasConfig, atlasTerms } from '../../config'
 
 type StatusFilter = 'present' | 'detached' | 'dead' | 'notYet' | 'unknown' | 'all'
 
@@ -298,7 +298,7 @@ export function HeroSidebar() {
       <header className="chapter-head">
         <div className="chapter-kicker">
           <span className="chapter-number">第 {chapter} 回</span>
-          <span className={`arc-badge arc-tone-${arc.tone}`}>好漢行蹤</span>
+          <span className={`arc-badge arc-tone-${arc.tone}`}>{atlasTerms().figureTrail}</span>
         </div>
         <h2 className="chapter-title">
           {clauses.map((clause) => (
@@ -337,8 +337,8 @@ export function HeroSidebar() {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="搜尋姓名、綽號、星號"
-            aria-label="搜尋好漢"
+            placeholder={atlasTerms().searchPlaceholder}
+            aria-label={`搜尋${atlasTerms().figurePlural}`}
           />
           {query && (
             <button type="button" onClick={() => setQuery('')} aria-label="清除搜尋">
@@ -396,8 +396,8 @@ export function HeroSidebar() {
           <div className="empty-mark" aria-hidden="true">
             無
           </div>
-          <strong>本章沒有符合條件的好漢</strong>
-          試試切換「全部」，或拖動時間軸到好漢出場之後。
+          <strong>本章沒有符合條件的{atlasTerms().figurePlural}</strong>
+          試試切換「全部」，或拖動時間軸到{atlasTerms().figurePlural}出場之後。
           <button
             type="button"
             className="hero-empty-all"
@@ -462,9 +462,9 @@ export function HeroSidebar() {
       )}
 
       <div className="sidebar-foot">
-        好漢位置為章回快照，非逐日行程；征戰期間以軍團所在位置推定，個人分兵另有標註。
+        {atlasTerms().figurePlural}位置為章回快照，非逐日行程；征戰期間以軍團所在位置推定，個人分兵另有標註。
         <br />
-        點選好漢可查看截至本章的行蹤；點選地名可在地圖上定位。
+        點選{atlasTerms().figurePlural}可查看截至本章的行蹤；點選地名可在地圖上定位。
       </div>
     </div>
   )

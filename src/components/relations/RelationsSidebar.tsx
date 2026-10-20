@@ -22,6 +22,7 @@ import {
   type ResolvedRelation,
 } from '../../lib/relationsGraph'
 import { useAppStore } from '../../store/appStore'
+import { atlasTerms } from '../../config'
 
 interface RelationsSidebarProps {
   allChapters: boolean
@@ -276,7 +277,7 @@ function FigureDetail({
             type="button"
             onClick={() => navigate(`/heroes?chapter=${chapter}&hero=${figure.id}`)}
           >
-            好漢行蹤
+            {atlasTerms().figureTrail}
           </button>
         )}
         <button type="button" onClick={() => navigate(`/biographies?figure=${figure.id}`)}>

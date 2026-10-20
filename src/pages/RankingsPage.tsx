@@ -3,6 +3,7 @@ import { RankingsSidebar } from '../components/rankings/RankingsSidebar'
 import { RankingBoard } from '../components/rankings/RankingBoard'
 import { allRankings, rankingById } from '../lib/rankings'
 import { useAppStore } from '../store/appStore'
+import { atlasTerms } from '../config'
 
 export function RankingsPage() {
   const selectedRankingId = useAppStore((store) => store.selectedRankingId)
@@ -10,24 +11,29 @@ export function RankingsPage() {
   const selectedFigureId = useAppStore((store) => store.selectedFigureId)
   const selectFigure = useAppStore((store) => store.selectFigure)
 
+  const fallbackId = allRankings[0]?.id ?? null
   const activeId =
-    selectedRankingId && rankingById[selectedRankingId] ? selectedRankingId : allRankings[0].id
+    selectedRankingId && rankingById[selectedRankingId]
+      ? selectedRankingId
+      : (fallbackId ?? '')
 
   useEffect(() => {
-    if (!selectedRankingId) selectRanking(allRankings[0].id)
-  }, [selectRanking, selectedRankingId])
+    if (!selectedRankingId && fallbackId) selectRanking(fallbackId)
+  }, [fallbackId, selectRanking, selectedRankingId])
 
   return (
     <>
-      <aside className="sidebar ranking-nav-pane" aria-label="英雄榜側欄">
+      <aside className="sidebar ranking-nav-pane" aria-label="榜單側欄">
         <RankingsSidebar selectedId={activeId} onSelect={selectRanking} />
       </aside>
-      <main className="map-pane ranking-pane" aria-label="水滸英雄榜">
-        <RankingBoard
-          category={rankingById[activeId]}
-          selectedKey={selectedFigureId}
-          onSelectKey={selectFigure}
-        />
+      <main className="map-pane ranking-pane" aria-label={`${atlasTerms().rankingsTitle}榜單`}>
+        {rankingById[activeId] ? (
+          <RankingBoard
+            category={rankingById[activeId]}
+            selectedKey={selectedFigureId}
+            onSelectKey={selectFigure}
+          />
+        ) : null}
       </main>
     </>
   )

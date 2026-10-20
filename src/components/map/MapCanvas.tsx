@@ -32,7 +32,7 @@ import { chapterByNumber } from '../../data/chapters'
 import { useAppStore } from '../../store/appStore'
 import { createProjection } from '../../map/projection'
 import { useReducedMotion } from '../../lib/useReducedMotion'
-import { atlasConfig } from '../../config'
+import { atlasConfig, atlasTerms } from '../../config'
 import type { Place, StoryEvent } from '../../data/types'
 
 
@@ -832,7 +832,7 @@ export function MapCanvas() {
     },
     {
       key: 'heroes',
-      label: '好漢所在',
+      label: `${atlasTerms().figurePlural}所在`,
       checked: layers.heroes,
       onToggle: () => toggleLayer('heroes'),
       icon: (
@@ -854,7 +854,7 @@ export function MapCanvas() {
     },
     {
       key: 'trail',
-      label: '好漢行蹤',
+      label: atlasTerms().figureTrail,
       checked: layers.trail,
       onToggle: () => toggleLayer('trail'),
       icon: (
@@ -1294,7 +1294,7 @@ export function MapCanvas() {
       <div className="map-cartouche">
         <div className="map-cartouche-inner">
           <span className="map-cartouche-era">大宋宣和年間</span>
-          <span className="map-cartouche-title">水滸輿圖</span>
+          <span className="map-cartouche-title">{atlasConfig().title}</span>
           <span className="map-cartouche-arc">{arc.name}</span>
         </div>
         <div className="map-seal" aria-hidden="true">

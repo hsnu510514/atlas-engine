@@ -58,7 +58,7 @@ function buildDerived(): RankingCategory[] {
   id: 'seat-rank',
   name: '座次高低',
   group: 'rank',
-  description: '依第一百八回忠義堂石碣排座次，天罡地煞一百單八將之序。',
+  description: '依書中排定之座次或名位高低排列。',
   basis: 'text',
   reliability: 'high',
   direction: 'asc',
@@ -102,7 +102,7 @@ const appearances: RankingCategory = {
   name: '出場回數',
   group: 'rank',
   description:
-    '統計事件資料中提及該好漢的章回事件數（非逐字出場）。事件僅標註少數人物，故數字偏低。',
+    '統計事件資料中提及該人物的章回事件數（非逐字出場）。事件僅標註少數人物，故數字偏低。',
   basis: 'inferred',
   reliability: 'low',
   direction: 'desc',
@@ -121,7 +121,7 @@ const interactionCount: RankingCategory = {
   name: '互動數',
   group: 'relation',
   description:
-    '人物關係資料中「具體劇情互動」的則數（非戰鬥數、非同場共事），宋江等主角因往來人物多而偏高。',
+    '人物關係資料中「具體劇情互動」的則數（非戰鬥數、非同場共事）；往來人物多者偏高。',
   basis: 'inferred',
   reliability: 'medium',
   direction: 'desc',

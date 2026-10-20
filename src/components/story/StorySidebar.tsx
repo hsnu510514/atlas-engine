@@ -5,6 +5,7 @@ import { eventsForChapter } from '../../data/events'
 import { heroById } from '../../data/heroes'
 import { placeById } from '../../data/places'
 import { useAppStore } from '../../store/appStore'
+import { atlasTerms } from '../../config'
 import type { EventKind, StoryEvent } from '../../data/types'
 
 const eventKindLabel: Record<EventKind, string> = {
@@ -73,7 +74,7 @@ function EventCard({ event, isSelected }: { event: StoryEvent; isSelected: boole
               onClick={() => {
                 navigate(`/heroes?chapter=${event.chapter}&hero=${hero.id}`)
               }}
-              title={`在好漢行蹤中查看${hero.name}`}
+              title={`在${atlasTerms().figureTrail}中查看${hero.name}`}
             >
               {hero.name}
             </button>
@@ -144,7 +145,7 @@ export function StorySidebar() {
       )}
 
       <div className="sidebar-foot">
-        《水滸傳》一百二十回本 · 事件與位置為文學地圖整理，非史料考證定本。
+        {atlasTerms().edition} · 事件與位置為文學地圖整理，非史料考證定本。
         <br />
         點選事件可在地圖上定位；點選地名可查看考證說明。
       </div>

@@ -90,20 +90,24 @@ function lifeEntries(figure: Figure): ProfileEntry[] {
   const hero = figure.kind === 'hero' ? heroById[figure.id] : null
 
   if (hero) {
+    const standing = [
+      hero.star,
+      hero.rank !== undefined ? `第 ${hero.rank} 席` : undefined,
+    ].filter(Boolean)
     entries.push({
       id: `${hero.id}-life-first`,
       chapter: hero.firstChapter,
       type: 'life',
       title: '初登場',
-      summary: `第 ${hero.firstChapter} 回登場，${hero.star}・第 ${hero.rank} 席。`,
+      summary: `第 ${hero.firstChapter} 回登場${standing.length ? `，${standing.join('・')}` : ''}。`,
     })
     if (hero.joinChapter !== undefined && hero.joinChapter !== hero.firstChapter) {
       entries.push({
         id: `${hero.id}-life-join`,
         chapter: hero.joinChapter,
         type: 'life',
-        title: '入夥梁山',
-        summary: `第 ${hero.joinChapter} 回歸梁山泊聚義。`,
+        title: '加入陣營',
+        summary: `第 ${hero.joinChapter} 回正式加入陣營。`,
       })
     }
     if (hero.fateChapter) {

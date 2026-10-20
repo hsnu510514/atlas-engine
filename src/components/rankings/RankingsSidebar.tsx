@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { allRankings, sortedGroups } from '../../lib/rankings'
+import { atlasTerms } from '../../config'
 import { rankingGroupById } from '../../data/rankings'
 
 interface RankingsSidebarProps {
@@ -35,7 +36,7 @@ export function RankingsSidebar({ selectedId, onSelect }: RankingsSidebarProps) 
           <span className="arc-badge arc-tone-cinnabar">排行榜</span>
         </div>
         <h2 className="chapter-title">
-          <span>水滸群英</span>
+          <span>{atlasTerms().rankingsTitle}</span>
           <span>諸榜</span>
         </h2>
         <div className="chapter-meta">

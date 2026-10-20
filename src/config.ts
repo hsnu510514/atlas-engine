@@ -25,6 +25,36 @@ export interface AtlasHeroGroup {
   match: (hero: Hero) => boolean
 }
 
+export interface AtlasTerms {
+  figure: string
+  figurePlural: string
+  figures: string
+  figureTrail: string
+  biographyTitle: string
+  biographySubtitle: string
+  rankingsTitle: string
+  edition: string
+  faction: string
+  searchPlaceholder: string
+}
+
+const defaultTerms: AtlasTerms = {
+  figure: '人物',
+  figurePlural: '人物',
+  figures: '人物',
+  figureTrail: '人物行蹤',
+  biographyTitle: '人物列傳',
+  biographySubtitle: '群英事蹟',
+  rankingsTitle: '群英',
+  edition: '文學作品',
+  faction: '勢力',
+  searchPlaceholder: '搜尋姓名、別名、出身',
+}
+
+export function atlasTerms(): AtlasTerms {
+  return { ...defaultTerms, ...config.terms }
+}
+
 export interface AtlasConfig {
   id: string
   title: string
@@ -38,6 +68,7 @@ export interface AtlasConfig {
   clusters?: Record<string, AtlasCluster>
   clusterOf?: (figure: Figure) => string
   heroGroups?: AtlasHeroGroup[]
+  terms?: Partial<AtlasTerms>
 }
 
 let config: AtlasConfig = {

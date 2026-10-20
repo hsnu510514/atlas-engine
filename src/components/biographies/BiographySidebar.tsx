@@ -3,6 +3,7 @@ import { Search, X } from 'lucide-react'
 import { figures } from '../../data/figures'
 import type { Figure } from '../../data/types'
 import { buildProfile, figureGroupMeta, figureGroupOf } from '../../lib/figureProfile'
+import { atlasTerms } from '../../config'
 
 interface BiographySidebarProps {
   selectedId: string | null
@@ -93,6 +94,7 @@ export function BiographySidebar({ selectedId, onSelect }: BiographySidebarProps
       .filter((group) => group.figures.length > 0)
   }, [query])
 
+  const terms = atlasTerms()
   const total = groups.reduce((sum, group) => sum + group.figures.length, 0)
   const heroCount = figures.filter((figure) => figure.kind === 'hero').length
 
@@ -104,15 +106,15 @@ export function BiographySidebar({ selectedId, onSelect }: BiographySidebarProps
           <span className="arc-badge arc-tone-cinnabar">列傳</span>
         </div>
         <h2 className="chapter-title">
-          <span>水滸列傳</span>
-          <span>群英事蹟</span>
+          <span>{terms.biographyTitle}</span>
+          <span>{terms.biographySubtitle}</span>
         </h2>
         <div className="chapter-meta">
           <span>
-            好漢 <b>{heroCount}</b>
+            {terms.figurePlural} <b>{heroCount}</b>
           </span>
           <span>
-            全人物 <b>{figures.length}</b>
+            全{terms.figures} <b>{figures.length}</b>
           </span>
         </div>
         <p className="chapter-note">
@@ -127,7 +129,7 @@ export function BiographySidebar({ selectedId, onSelect }: BiographySidebarProps
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="搜尋姓名、綽號、星號、出身"
+          placeholder={terms.searchPlaceholder}
           aria-label="搜尋人物"
         />
         {query && (

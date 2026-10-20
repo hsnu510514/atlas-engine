@@ -36,7 +36,7 @@ export function RelationsPage() {
           onResetTypes={() => setVisibleTypes(new Set(relationTypeOrder))}
         />
       </aside>
-      <main className="map-pane relation-pane" aria-label="水滸人物關係圖">
+      <main className="map-pane relation-pane" aria-label="人物關係圖">
         <RelationCanvas
           allChapters={allChapters}
           depth={depth}
