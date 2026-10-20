@@ -15,6 +15,7 @@ import {
   type ProfileEntryType,
 } from '../../lib/figureProfile'
 import { FigurePortrait } from './FigurePortrait'
+import { atlasTerms } from '../../config'
 
 interface BiographyBoardProps {
   figureId: string | null
@@ -61,7 +62,7 @@ function Facts({ figure }: { figure: Figure }) {
     if (figure.star) facts.push({ term: '星號', value: figure.star })
   }
   facts.push({ term: '身分', value: figure.role })
-  facts.push({ term: '陣營', value: figure.affiliation })
+  facts.push({ term: atlasTerms().faction, value: figure.affiliation })
   if (figure.aliases && figure.aliases.length > 0) {
     facts.push({ term: '別稱', value: figure.aliases.join('、') })
   }
@@ -223,7 +224,7 @@ export function BiographyBoard({ figureId, onSelectFigure }: BiographyBoardProps
               }
             >
               <BookOpen size={13} aria-hidden="true" />
-              好漢行蹤
+              {atlasTerms().figureTrail}
             </button>
           )}
           <button type="button" onClick={() => navigate(`/relations?figure=${figure.id}`)}>
