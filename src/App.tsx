@@ -1,0 +1,100 @@
+﻿import { useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
+import { AppHeader } from './components/layout/AppHeader'
+import { Timeline } from './components/layout/Timeline'
+import { AboutDialog } from './components/about/AboutDialog'
+import { StoryPage } from './pages/StoryPage'
+import { HeroPage } from './pages/HeroPage'
+import { RelationsPage } from './pages/RelationsPage'
+import { RankingsPage } from './pages/RankingsPage'
+import { BiographyPage } from './pages/BiographyPage'
+import { useAppStore } from './store/appStore'
+import { applyUrlState } from './lib/urlState'
+import { atlasConfig } from './content'
+
+function useUrlState() {
+  const [params, setParams] = useSearchParams()
+  const chapter = useAppStore((state) => state.chapter)
+  const selectedEventId = useAppStore((state) => state.selectedEventId)
+  const selectedHeroId = useAppStore((state) => state.selectedHeroId)
+  const selectedFigureId = useAppStore((state) => state.selectedFigureId)
+  const selectedRankingId = useAppStore((state) => state.selectedRankingId)
+
+  useEffect(() => {
+    const next = new URLSearchParams(params)
+    next.set('chapter', String(chapter))
+    if (selectedEventId) next.set('event', selectedEventId)
+    else next.delete('event')
+    if (selectedHeroId) next.set('hero', selectedHeroId)
+    else next.delete('hero')
+    if (selectedFigureId) next.set('figure', selectedFigureId)
+    else next.delete('figure')
+    if (selectedRankingId) next.set('list', selectedRankingId)
+    else next.delete('list')
+    if (next.toString() !== params.toString()) {
+      setParams(next, { replace: true })
+    }
+  }, [chapter, params, selectedEventId, selectedFigureId, selectedHeroId, selectedRankingId, setParams])
+
+  useEffect(() => {
+    window.addEventListener('popstate', applyUrlState)
+    return () => window.removeEventListener('popstate', applyUrlState)
+  }, [])
+}
+
+function App() {
+  const [aboutOpen, setAboutOpen] = useState(false)
+  const location = useLocation()
+  const setMode = useAppStore((state) => state.setMode)
+  const chapter = useAppStore((state) => state.chapter)
+  const mode = useAppStore((state) => state.mode)
+  const config = atlasConfig()
+
+  useEffect(() => {
+    const nextMode = location.pathname.includes('/relations')
+      ? 'relations'
+      : location.pathname.includes('/heroes')
+        ? 'heroes'
+        : location.pathname.includes('/rankings')
+          ? 'rankings'
+          : location.pathname.includes('/biographies')
+            ? 'biographies'
+            : 'story'
+    if (useAppStore.getState().mode !== nextMode) {
+      setMode(nextMode)
+      applyUrlState()
+    }
+  }, [location.pathname, setMode])
+
+  useUrlState()
+
+  useEffect(() => {
+    const modeLabel = config.nav.find((item) => item.id === mode)?.label ?? config.title
+    document.title = `${modeLabel} · 第${chapter}${config.chapterUnit ?? '回'} · ${config.title}`
+  }, [chapter, config, mode])
+
+  return (
+    <div className="app">
+      <AppHeader onOpenAbout={() => setAboutOpen(true)} />
+      <div className="app-body">
+        <Routes>
+          <Route path="/" element={<Navigate to="/story" replace />} />
+          <Route path="/story" element={<StoryPage />} />
+          <Route path="/heroes" element={<HeroPage />} />
+          <Route path="/relations" element={<RelationsPage />} />
+          <Route path="/rankings" element={<RankingsPage />} />
+          <Route path="/biographies" element={<BiographyPage />} />
+          <Route path="*" element={<Navigate to="/story" replace />} />
+        </Routes>
+      </div>
+      <Timeline />
+      {config.about ? (
+        <AboutDialog open={aboutOpen} onOpenChange={setAboutOpen}>
+          {config.about}
+        </AboutDialog>
+      ) : null}
+    </div>
+  )
+}
+
+export default App
