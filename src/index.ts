@@ -9,6 +9,7 @@ export {
   type AtlasConfig,
   type AtlasContent,
   type AtlasFigureGroup,
+  type AtlasHeroGroup,
   type AtlasNavItem,
 } from './content'
 export { useAppStore } from './store/appStore'

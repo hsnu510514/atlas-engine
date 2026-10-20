@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { Figure } from './data/types'
+import type { Figure, Hero } from './data/types'
 
 export interface AtlasNavItem {
   id: string
@@ -19,6 +19,12 @@ export interface AtlasCluster {
   center: { x: number; y: number }
 }
 
+export interface AtlasHeroGroup {
+  id: string
+  label: string
+  match: (hero: Hero) => boolean
+}
+
 export interface AtlasConfig {
   id: string
   title: string
@@ -31,6 +37,7 @@ export interface AtlasConfig {
   figureGroupOf?: (figure: Figure) => string
   clusters?: Record<string, AtlasCluster>
   clusterOf?: (figure: Figure) => string
+  heroGroups?: AtlasHeroGroup[]
 }
 
 let config: AtlasConfig = {

@@ -32,6 +32,7 @@ import { chapterByNumber } from '../../data/chapters'
 import { useAppStore } from '../../store/appStore'
 import { createProjection } from '../../map/projection'
 import { useReducedMotion } from '../../lib/useReducedMotion'
+import { atlasConfig } from '../../config'
 import type { Place, StoryEvent } from '../../data/types'
 
 
@@ -319,6 +320,7 @@ export function MapCanvas() {
       resolveHeroState(selectedHeroId, chapter)
     )
   }, [chapter, heroStates, selectedHeroId])
+  const primaryHeroGroup = atlasConfig().heroGroups?.[0]
   const heroGroups = useMemo(() => {
     const map = new Map<string, HeroState[]>()
     for (const state of heroStates) {
@@ -335,7 +337,7 @@ export function MapCanvas() {
       .map(([placeId, states]) => ({
         placeId,
         states,
-        hasTianGang: states.some((state) => (state.hero.rank ?? 0) <= 36),
+        hasTianGang: states.some((state) => primaryHeroGroup?.match(state.hero) ?? true),
       }))
       .sort((a, b) => b.states.length - a.states.length)
   }, [heroStates])

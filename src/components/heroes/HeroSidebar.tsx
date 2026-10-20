@@ -6,6 +6,7 @@ import { chapterByNumber } from '../../data/chapters'
 import { anchorsForHero, statesForChapter, type HeroState } from '../../data/heroPositions'
 import { placeById } from '../../data/places'
 import { useAppStore } from '../../store/appStore'
+import { atlasConfig } from '../../config'
 
 type StatusFilter = 'present' | 'detached' | 'dead' | 'notYet' | 'unknown' | 'all'
 
@@ -193,7 +194,8 @@ export function HeroSidebar() {
   const states = useMemo(() => statesForChapter(chapter), [chapter])
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<StatusFilter>('present')
-  const [group, setGroup] = useState<'天罡' | '地煞' | 'all'>('all')
+  const heroGroupMeta = atlasConfig().heroGroups ?? []
+  const [group, setGroup] = useState<string>('all')
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const detailRef = useRef<HTMLElement>(null)
 
@@ -234,8 +236,8 @@ export function HeroSidebar() {
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     return states.filter((state) => {
-      if (group === '天罡' && (state.hero.rank ?? 0) > 36) return false
-      if (group === '地煞' && (state.hero.rank ?? 0) <= 36) return false
+      const activeGroup = heroGroupMeta.find((item) => item.id === group)
+      if (activeGroup && !activeGroup.match(state.hero)) return false
       if (normalized) {
         const haystack = `${state.hero.name} ${state.hero.nickname} ${state.hero.star} ${state.hero.faction}`.toLowerCase()
         if (!haystack.includes(normalized)) return false
@@ -248,7 +250,7 @@ export function HeroSidebar() {
       if (filter === 'unknown') return state.status === 'unknown'
       return true
     })
-  }, [filter, group, query, states])
+  }, [filter, group, heroGroupMeta, query, states])
 
   const groups = useMemo(() => {
     if (
@@ -360,19 +362,28 @@ export function HeroSidebar() {
             </button>
           ))}
         </div>
-        <div className="hero-filter-row is-secondary">
-          <span className="hero-filter-label">座次</span>
-          {(['all', '天罡', '地煞'] as const).map((item) => (
+        {heroGroupMeta.length > 0 ? (
+          <div className="hero-filter-row is-secondary">
+            <span className="hero-filter-label">分組</span>
             <button
-              key={item}
               type="button"
-              className={`hero-filter${group === item ? ' is-active' : ''}`}
-              onClick={() => setGroup(item)}
+              className={`hero-filter${group === 'all' ? ' is-active' : ''}`}
+              onClick={() => setGroup('all')}
             >
-              {item === 'all' ? '全部' : item}
+              全部
             </button>
-          ))}
-        </div>
+            {heroGroupMeta.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`hero-filter${group === item.id ? ' is-active' : ''}`}
+                onClick={() => setGroup(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="section-heading">

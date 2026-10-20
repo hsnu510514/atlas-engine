@@ -30,5 +30,6 @@ export {
   type AtlasCluster,
   type AtlasConfig,
   type AtlasFigureGroup,
+  type AtlasHeroGroup,
   type AtlasNavItem,
 } from './config'
